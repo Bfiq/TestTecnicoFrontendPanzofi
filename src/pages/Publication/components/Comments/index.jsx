@@ -1,4 +1,4 @@
-import React, {useState, useMemo, useCallback} from 'react'
+import React, {useState, useMemo, useCallback, useEffect} from 'react'
 import { Box, Grid, Typography, Button, Avatar, IconButton } from "@mui/material";
 import { ForwardOutlined, ChatBubbleOutline, MoreHoriz } from "@mui/icons-material";
 import { theme } from '../../../../theme';
@@ -7,16 +7,13 @@ import { styles as stylePublication } from "../../style";
 import { InputComent } from "../../shared/InputComment";
 import commentService from "../../../../services/comment";
 
-function Comments({comments=[], listCommentChild=true}) {
-    const [activeCommentId, setActiveCommentId] = useState(null);
+function Comments({comments=[], listCommentChild=true, refreshComments, activeCommentId, setActiveCommentId}) {
     const [commentsChildList, setCommentsChildList] = useState([]);
-    const [expandedCommentId, setExpandedCommentId] = useState(null);
-    console.log(comments);
-    
+    const [expandedCommentId, setExpandedCommentId] = useState(null); //listado de comentarios activo
 
     const handleToggleInput = useCallback((id) => {        
         setActiveCommentId(activeCommentId === id ? null : id);
-    },[activeCommentId])
+    },[activeCommentId, setActiveCommentId])
 
     const commentsChild = async (id) => {
         const result = await commentService.commentsByParentComment(id)
@@ -24,9 +21,14 @@ function Comments({comments=[], listCommentChild=true}) {
         setExpandedCommentId(id);
     }
 
+    useEffect(()=>{
+        console.log("Updated commentsChildList:", commentsChildList);
+    },[commentsChildList])
+
     const processedComments = useMemo(() => {
-        return comments.map((comment, index)=>(
-            <Grid container key={index}>
+        
+        return comments.map((comment, index)=>{
+            return <Grid container key={index}>
                 <Grid item xs={12}>
                 <Grid container direction="row" paddingTop={2} paddingLeft={2}>
                     <Grid item>
@@ -87,19 +89,20 @@ function Comments({comments=[], listCommentChild=true}) {
                         <Grid container direction='row'>
                             <Grid item xs={1} />
                             <Grid item xs={9}>
-                                <InputComent commentId={comment.comment_id} level={comment.level + 1} />
+                                <InputComent commentId={comment.comment_id} level={comment.level + 1} refreshComments={refreshComments} />
                             </Grid>
                         </Grid>
                     </Grid>
                 )}
                 {expandedCommentId === comment.comment_id && (
                     <Grid item xs={12} paddingLeft={4}>
-                        <Comments comments={commentsChildList} />
+                        <Comments comments={commentsChildList} refreshComments={() => commentsChild(comment.comment_id)} activeCommentId={activeCommentId} 
+              setActiveCommentId={setActiveCommentId} />
                     </Grid>
                 )}
             </Grid>
-        ))
-    },[comments, activeCommentId, expandedCommentId, commentsChildList, handleToggleInput])
+        })
+    },[comments, activeCommentId, expandedCommentId, commentsChildList, handleToggleInput, refreshComments, setActiveCommentId])
 
   return (
     <>
@@ -117,7 +120,7 @@ function Comments({comments=[], listCommentChild=true}) {
                 <Grid container direction="row">
                     <Grid item xs={1} />
                     <Grid item xs={9}>
-                        <InputComent />
+                        <InputComent refreshComments={refreshComments} />
                     </Grid>
                 </Grid>
                 </Grid>

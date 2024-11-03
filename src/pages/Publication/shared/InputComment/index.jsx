@@ -6,7 +6,7 @@ import commentService from "../../../../services/comment";
 import { styles } from "./style";
 import { theme } from '../../../../theme';
 
-function InputComent({level=0, commentId}) {
+function InputComent({level=0, commentId, refreshComments}) {
     const [commentInput, setCommnetInput] = useState("") //libreria de formularios para un solo campo?
 
     const createComment = async () => {
@@ -18,6 +18,8 @@ function InputComent({level=0, commentId}) {
         }
         await commentService.createComment(data)
         setCommnetInput("")
+        console.log("Refrescando....");
+        refreshComments()
     }
 
   return (

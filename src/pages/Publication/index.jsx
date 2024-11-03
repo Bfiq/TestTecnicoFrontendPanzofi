@@ -10,13 +10,12 @@ import commentService from "../../services/comment.js";
 
 function Publication() {
   const [communityData, setCommunityData] = useState({});
-  //Las reglas de comunidad se traduciran en el front o back?
   const [communityRules, setCommunityRules] = useState([])
   const [comments, setComments] = useState([]);
+  const [activeCommentId, setActiveCommentId] = useState(null); //Comentario "activo"
 
   const getComments = async () =>{
     const data = await commentService.allComments()
-    console.log(data);
     setComments(data)
   }
 
@@ -43,6 +42,10 @@ function Publication() {
     getComments()
   },[])
 
+  const refreshComments = async () => {
+    await getComments()
+  }
+
   return (
     <Box
       sx={styles.principalBox}
@@ -53,7 +56,8 @@ function Publication() {
             sx={styles.padding1}
           >
             <Post communityData={communityData} />
-            <Comments comments={comments} listCommentChild={false} />
+            <Comments comments={comments} listCommentChild={false} refreshComments={refreshComments} activeCommentId={activeCommentId} 
+              setActiveCommentId={setActiveCommentId} />
           </Paper>
         </Grid>
         <Grid item xs={3}>

@@ -77,4 +77,8 @@ export const styles = {
         ...icon,
         transform: 'rotate(90deg)',
     },
+    icon:{
+        color: "#C1C2C3",
+        fontSize: 36
+    }
 }

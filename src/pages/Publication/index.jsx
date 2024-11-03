@@ -6,12 +6,19 @@ import { Post } from "./components/Post";
 import { Comments } from "./components/Comments";
 import { Info } from "./components/Info";
 import { styles } from "./style.jsx";
+import commentService from "../../services/comment.js";
 
 function Publication() {
   const [communityData, setCommunityData] = useState({});
   //Las reglas de comunidad se traduciran en el front o back?
   const [communityRules, setCommunityRules] = useState([])
   const [comments, setComments] = useState([]);
+
+  const getComments = async () =>{
+    const data = await commentService.allComments()
+    console.log(data);
+    setComments(data)
+  }
 
   useEffect(()=>{
     //Futuras Peticiones a la api
@@ -33,11 +40,7 @@ function Publication() {
       {nameRule: "Spam", descriptionRule: "Spam"}
     ])
 
-    setComments([
-      {username: "stronghup", comment: '"People are too focused on code generartion and completely ignore that LLMs are useful for code analysis"'},
-      {username: "User2", comment: "Comentario 2"},
-      {username: "User3", comment: "Comentario 3"}
-    ])
+    getComments()
   },[])
 
   return (
@@ -50,7 +53,7 @@ function Publication() {
             sx={styles.padding1}
           >
             <Post communityData={communityData} />
-            <Comments comments={comments} />
+            <Comments comments={comments} listCommentChild={false} />
           </Paper>
         </Grid>
         <Grid item xs={3}>

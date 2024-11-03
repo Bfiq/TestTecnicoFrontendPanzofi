@@ -10,7 +10,6 @@ import commentService from "../../services/comment.js";
 
 function Publication() {
   const [communityData, setCommunityData] = useState({});
-  const [communityRules, setCommunityRules] = useState([])
   const [comments, setComments] = useState([]);
   const [activeCommentId, setActiveCommentId] = useState(null); //Comentario "activo"
 
@@ -20,7 +19,6 @@ function Publication() {
   }
 
   useEffect(()=>{
-    //Futuras Peticiones a la api
     setCommunityData({
       communityImage: "https://www.cepmaude.com/wp-content/uploads/2017/08/html_2.jpg",
       communityName: "Programming",
@@ -30,14 +28,6 @@ function Publication() {
       communityOnlineMembers: 3400,
       CommunityRankedBySize: 1
     })
-
-    setCommunityRules([
-      {nameRule: "Keep submissions on topic and of high quality", descriptionRule: "Keep submissions on topic and of high quality"},
-      {nameRule: "No Surveys", descriptionRule: "No Surveys"},
-      {nameRule: "No résumés/job listings", descriptionRule: "No résumés/job listings"},
-      {nameRule: "/r/ programming is not a support forum", descriptionRule: "/r/ programming is not a support forum"},
-      {nameRule: "Spam", descriptionRule: "Spam"}
-    ])
 
     getComments()
   },[])
@@ -66,7 +56,7 @@ function Publication() {
               <CommunityInfo communityData={communityData}/>
             </Grid>
             <Grid item>
-              <Rules communityName={communityData.communityName} rulesList={communityRules}/>
+              <Rules communityName={communityData.communityName} />
             </Grid>
             <Grid item>
               <Info />

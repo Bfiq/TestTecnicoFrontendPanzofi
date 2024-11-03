@@ -5,6 +5,7 @@ import './pages/Publication'
 import Publication from './pages/Publication';
 import {theme} from "./theme"
 import { ThemeProvider } from "@mui/material";
+import './i18n';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

@@ -19,6 +19,9 @@ export const WhiteAccordion = styled(Accordion)(({ theme }) => ({
 }));
 
 export const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({ theme }) => ({
+    display: 'flex',
+    flexWrap: 'wrap',
+    gap: '4px',
     width: "100%",
     backgroundColor: theme.palette.grey[100],
     [`& .${toggleButtonGroupClasses.grouped}`]: {

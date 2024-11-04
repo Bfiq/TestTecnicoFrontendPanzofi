@@ -19,6 +19,8 @@ function InputComent({level=0, commentId, refreshComments}) {
         await commentService.createComment(data)
         setCommnetInput("")
         console.log("Refrescando....");
+        console.log(await refreshComments());
+        
         refreshComments()
     }
 

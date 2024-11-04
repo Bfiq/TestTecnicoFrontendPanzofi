@@ -1,4 +1,4 @@
-import React, {useState, useMemo, useCallback, useEffect} from 'react'
+import React, {useState, useMemo, useCallback} from 'react'
 import { Box, Grid, Typography, Button, Avatar, IconButton } from "@mui/material";
 import { ForwardOutlined, ChatBubbleOutline, MoreHoriz } from "@mui/icons-material";
 import { theme } from '../../../../theme';
@@ -15,15 +15,12 @@ function Comments({comments=[], listCommentChild=true, refreshComments, activeCo
         setActiveCommentId(activeCommentId === id ? null : id);
     },[activeCommentId, setActiveCommentId])
 
-    const commentsChild = async (id) => {
+    const commentsChild = useCallback(async (id) => {
+        console.log("Busqueda del id: "+id);
         const result = await commentService.commentsByParentComment(id)
         setCommentsChildList(result)
         setExpandedCommentId(id);
-    }
-
-    useEffect(()=>{
-        console.log("Updated commentsChildList:", commentsChildList);
-    },[commentsChildList])
+    },[])
 
     const processedComments = useMemo(() => {
         
@@ -89,20 +86,20 @@ function Comments({comments=[], listCommentChild=true, refreshComments, activeCo
                         <Grid container direction='row'>
                             <Grid item xs={1} />
                             <Grid item xs={9}>
-                                <InputComent commentId={comment.comment_id} level={comment.level + 1} refreshComments={refreshComments} />
+                                <InputComent commentId={comment.comment_id} level={comment.level + 1} refreshComments={() => commentsChild(comment.comment_id)} />
                             </Grid>
                         </Grid>
                     </Grid>
                 )}
                 {expandedCommentId === comment.comment_id && (
                     <Grid item xs={12} paddingLeft={4}>
-                        <Comments comments={commentsChildList} refreshComments={() => commentsChild(comment.comment_id)} activeCommentId={activeCommentId} 
-              setActiveCommentId={setActiveCommentId} />
+                        <Comments comments={commentsChildList} refreshComments={() => console.log("test")
+                        } activeCommentId={activeCommentId} setActiveCommentId={setActiveCommentId} id={comment.comment_id} />
                     </Grid>
                 )}
             </Grid>
         })
-    },[comments, activeCommentId, expandedCommentId, commentsChildList, handleToggleInput, refreshComments, setActiveCommentId])
+    },[comments, activeCommentId, expandedCommentId, commentsChildList, handleToggleInput, setActiveCommentId,commentsChild])
 
   return (
     <>

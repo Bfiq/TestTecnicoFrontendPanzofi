@@ -116,7 +116,7 @@ function Comments({comments=[], listCommentChild=true, refreshComments, activeCo
                 <Grid item>
                 <Grid container direction="row">
                     <Grid item xs={1} />
-                    <Grid item xs={9}>
+                    <Grid item xs={10}>
                         <InputComent refreshComments={refreshComments} />
                     </Grid>
                 </Grid>

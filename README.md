@@ -36,6 +36,13 @@ NOTA: Se recomienda usar npm 10.8.3
   npm start
 ```
 
+## Docker (opcional)
+Si hay problemas con la configuración del entorno puedes usar [docker](https://www.docker.com) y montar el contenedor
+
+```
+  docker-compose up -d
+```
+
 ## Documentación de las librerias utilizada
 [Material UI (Componentes visuales)](https://mui.com/material-ui/getting-started/)
 [React I 18 Next (Traducciones)](https://react.i18next.com/guides/quick-start)
